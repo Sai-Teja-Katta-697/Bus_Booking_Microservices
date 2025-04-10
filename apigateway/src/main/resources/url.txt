@@ -1,0 +1,2 @@
+http://localhost:8765/booking-service/bus-data
+http://localhost:8765/seat-booking-details/bus-seat
