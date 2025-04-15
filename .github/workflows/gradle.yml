@@ -25,7 +25,11 @@ jobs:
     - name: Detect changed services
       id: detect-changes
       run: |
-        CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+        if git rev-parse HEAD~1 >/dev/null 2>&1; then
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+        else
+          CHANGED_FILES=$(git diff --name-only HEAD)
+        fi
         echo "Changed files: $CHANGED_FILES"
 
         SERVICES=""
@@ -37,7 +41,6 @@ jobs:
 
         echo "Changed services: $SERVICES"
         echo "::set-output name=services::$SERVICES"
-
     # Step 4: Build and push Docker images using Jib
     - name: Build and push Docker images
       if: steps.detect-changes.outputs.services != ''
