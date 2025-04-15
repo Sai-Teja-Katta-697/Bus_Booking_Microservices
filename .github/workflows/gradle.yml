@@ -29,7 +29,7 @@ jobs:
         echo "Changed files: $CHANGED_FILES"
 
         SERVICES=""
-        for SERVICE in service1 service2 service3 service4 service5; do
+        for SERVICE in apigateway booking-service cloud-demo naming-server seat-booking-details; do
           if echo "$CHANGED_FILES" | grep -q "^$SERVICE/"; then
             SERVICES="$SERVICES $SERVICE"
           fi
