@@ -1,0 +1,53 @@
+name: CI/CD Pipeline with Jib
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Set up JDK 17
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: 17
+        distribution: 'temurin'
+
+    # Step 3: Detect changes in services
+    - name: Detect changed services
+      id: detect-changes
+      run: |
+        CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+        echo "Changed files: $CHANGED_FILES"
+
+        SERVICES=""
+        for SERVICE in service1 service2 service3 service4 service5; do
+          if echo "$CHANGED_FILES" | grep -q "^$SERVICE/"; then
+            SERVICES="$SERVICES $SERVICE"
+          fi
+        done
+
+        echo "Changed services: $SERVICES"
+        echo "::set-output name=services::$SERVICES"
+
+    # Step 4: Build and push Docker images using Jib
+    - name: Build and push Docker images
+      if: steps.detect-changes.outputs.services != ''
+      run: |
+        for SERVICE in ${{ steps.detect-changes.outputs.services }}; do
+          echo "Building and pushing Docker image for $SERVICE"
+          cd $SERVICE
+          ./gradlew jib
+          cd ..
+        done
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
