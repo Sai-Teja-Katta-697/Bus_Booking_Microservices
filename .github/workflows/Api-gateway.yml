@@ -20,9 +20,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          
       - name: Grant execute permission for Gradle wrapper
-        run: chmod +x ./gradlew
-        
+        run: chmod +x ./apigateway/gradlew
+        working-directory: ./apigateway
+
       - name: Build & Push Docker Image with Jib
         working-directory: ./apigateway
         env:
