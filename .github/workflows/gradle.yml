@@ -47,7 +47,7 @@ jobs:
     # Step 4: Build and push Docker images using Jib
     - name: Build and push Docker images
       run: |
-        SERVICES="apigateway booking-service cloud-demo naming-server seat-booking-details"
+        SERVICES="seat-booking-details"
         for SERVICE in $SERVICES; do
           echo "Building and pushing Docker image for $SERVICE"
           cd $SERVICE
