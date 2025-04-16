@@ -41,6 +41,9 @@ jobs:
 
         echo "Changed services: $SERVICES"
         echo "::set-output name=services::$SERVICES"
+    - name: Set executable permission for gradlew
+      run: |
+        chmod +x */gradlew    
     # Step 4: Build and push Docker images using Jib
     - name: Build and push Docker images
       run: |
