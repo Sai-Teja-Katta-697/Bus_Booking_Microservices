@@ -48,9 +48,14 @@ jobs:
         for SERVICE in ${{ steps.detect-changes.outputs.services }}; do
           echo "Building and pushing Docker image for $SERVICE"
           cd $SERVICE
-          ./gradlew jib
+          ./gradlew jib --info
           cd ..
         done
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Debug environment
+      run: |
+        echo "DOCKER_USERNAME: $DOCKER_USERNAME"
+        echo "DOCKER_PASSWORD: [REDACTED]"
+        echo "Changed services: ${{ steps.detect-changes.outputs.services }}"    
