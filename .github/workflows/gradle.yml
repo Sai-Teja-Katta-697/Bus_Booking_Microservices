@@ -40,7 +40,7 @@ jobs:
           done
           
           echo "Changed services: $SERVICES"
-          echo "::set-output name=services::$SERVICES"
+          echo "services=$SERVICES" >> $GITHUB_ENV
       
       # Step 4: Set executable permission for gradlew
       - name: Set executable permission for gradlew
@@ -49,7 +49,7 @@ jobs:
       
       # Step 5: Build and push Docker images using Jib
       - name: Build and push Docker images
-        if: steps.detect-changes.outputs.services != ''
+        if: env.services != ''
         run: |
           SERVICES="${{ steps.detect-changes.outputs.services }}"
           for SERVICE in $SERVICES; do
