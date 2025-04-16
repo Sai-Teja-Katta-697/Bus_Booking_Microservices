@@ -51,7 +51,8 @@ jobs:
       - name: Build and push Docker images
         if: steps.detect-changes.outputs.services != ''
         run: |
-          for SERVICE in ${{ steps.detect-changes.outputs.services }}; do
+          SERVICES="${{ steps.detect-changes.outputs.services }}"
+          for SERVICE in $SERVICES; do
             echo "Building and pushing Docker image for $SERVICE"
             cd $SERVICE
             ./gradlew jib --info
