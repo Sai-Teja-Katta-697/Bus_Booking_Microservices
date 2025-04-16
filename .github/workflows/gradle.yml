@@ -43,7 +43,7 @@ jobs:
         echo "::set-output name=services::$SERVICES"
     # Step 4: Build and push Docker images using Jib
     - name: Build and push Docker images
-      if: steps.detect-changes.outputs.services != ''
+#      if: steps.detect-changes.outputs.services != ''
       run: |
         for SERVICE in ${{ steps.detect-changes.outputs.services }}; do
           echo "Building and pushing Docker image for $SERVICE"
