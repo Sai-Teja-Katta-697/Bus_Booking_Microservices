@@ -22,4 +22,6 @@ public class CircuitBreakerController {
 //    public String sampleFallback(Exception e){
 //       return "Sample Fallback Response";
 //    }
+
+  
 }
