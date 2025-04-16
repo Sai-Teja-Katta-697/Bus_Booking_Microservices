@@ -53,6 +53,10 @@ jib {
 	to {
 		image = 'docker.io/kattasaiteja/naming-server' // Replace with your desired image name
 		tags = [version]
+		auth {
+			username = System.getenv('DOCKER_USERNAME') // Use environment variable for username
+			password = System.getenv('DOCKER_PASSWORD') // Use environment variable for password
+		}
 //		registry = 'docker.io' // Or your desired registry
 	}
 container {
