@@ -7,16 +7,25 @@ on:
     workflow_dispatch:
     paths:
       - 'apigateway/**'
+      - 'booking-service/**'
 
 
 jobs:
-  build-apigateway:
-    if: contains(join(github.event.head_commit.modified), 'apigateway/')
+  build-booking-service:
+    if: contains(join(github.event.head_commit.modified), 'booking-service/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build & Push API Gateway Docker Image
-        run: |
-          docker build -t your-dockerhub-username/apigateway:latest ./apigateway
-          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker push your-dockerhub-username/apigateway:latest
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build & Push Docker Image with Jib
+        working-directory: ./booking-service
+        env:
+          dockerUsername: ${{ secrets.DOCKER_USERNAME }}
+          dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
+        run: ./gradlew jib
