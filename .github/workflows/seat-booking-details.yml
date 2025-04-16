@@ -1,11 +1,11 @@
-name: Build & Push booking-service
+name: Build & Push seat booking details
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'booking-service/**'
+      - 'seat-booking-details/**'
   workflow_dispatch:
 # permission for gradle build
 
@@ -25,8 +25,9 @@ jobs:
         run: chmod +x ./gradlew
         
       - name: Build & Push Docker Image with Jib
-        working-directory: ./booking-service
-        run: ./gradlew jib :booking-service:jib
+        working-directory: ./seat-booking-details
+        run: ./gradlew jib :seat-booking-details:jib
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+

@@ -1,11 +1,11 @@
-name: Build & Push booking-service
+name: Build & Push cloud demo
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'booking-service/**'
+      - 'cloud-demo/**'
   workflow_dispatch:
 # permission for gradle build
 
@@ -25,8 +25,9 @@ jobs:
         run: chmod +x ./gradlew
         
       - name: Build & Push Docker Image with Jib
-        working-directory: ./booking-service
-        run: ./gradlew jib :booking-service:jib
+        working-directory: ./cloud-demo
+        run: ./gradlew jib :cloud-demo:jib
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+

@@ -1,11 +1,11 @@
-name: Build & Push booking-service
+name: Build & Push naming server
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'booking-service/**'
+      - 'naming-server/**'
   workflow_dispatch:
 # permission for gradle build
 
@@ -25,8 +25,8 @@ jobs:
         run: chmod +x ./gradlew
         
       - name: Build & Push Docker Image with Jib
-        working-directory: ./booking-service
-        run: ./gradlew jib :booking-service:jib
+        working-directory: ./naming-server
+        run: ./gradlew jib :naming-server:jib
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
