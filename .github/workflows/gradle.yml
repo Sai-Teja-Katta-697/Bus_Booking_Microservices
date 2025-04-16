@@ -1,70 +1,22 @@
-name: CI/CD Pipeline with Jib
+name: Build & Push Docker Images
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
+    workflow_dispatch:
+    paths:
+      - 'apigateway/**'
 
+
+jobs:
+  build-apigateway:
+    if: contains(join(github.event.head_commit.modified), 'apigateway/')
+    runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
-      
-      # Step 2: Set up JDK 17
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: 'temurin'
-      
-      # Step 3: Detect changes in services
-      - name: Detect changed services
-        id: detect-changes
+      - uses: actions/checkout@v3
+      - name: Build & Push API Gateway Docker Image
         run: |
-          if git rev-parse HEAD~1 >/dev/null 2>&1; then
-            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
-          else
-            CHANGED_FILES=$(git diff --name-only HEAD)
-          fi
-          echo "Changed files: $CHANGED_FILES"
-          
-          SERVICES=""
-          for SERVICE in  apigateway  booking-service  cloud-demo  naming-server  seat-booking-details; do
-            if echo "$CHANGED_FILES" | grep -q "^$SERVICE/"; then
-              SERVICES="$SERVICES $SERVICE"
-            fi
-          done
-          
-          echo "Changed services: $SERVICES"
-          echo "services=$SERVICES" >> $GITHUB_ENV
-      
-      # Step 4: Set executable permission for gradlew
-      - name: Set executable permission for gradlew
-        run: |
-          chmod +x */gradlew    
-      
-      # Step 5: Build and push Docker images using Jib
-      - name: Build and push Docker images
-        if: env.services != ''
-        run: |
-          SERVICES="${{ steps.detect-changes.outputs.services }}"
-          for SERVICE in $SERVICES; do
-            echo "Building and pushing Docker image for $SERVICE"
-            cd $SERVICE
-            ./gradlew jib --info
-            cd ..
-          done
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      
-      # Step 6: Debug environment
-      - name: Debug environment
-        run: |
-          echo "DOCKER_USERNAME: $DOCKER_USERNAME"
-          echo "DOCKER_PASSWORD: [REDACTED]"
-          echo "Changed services: ${{ steps.detect-changes.outputs.services }}"
+          docker build -t your-dockerhub-username/apigateway:latest ./apigateway
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker push your-dockerhub-username/apigateway:latest
