@@ -54,5 +54,4 @@ jib {
 	container {
 		ports = ['8888']
 	}
-
 }

@@ -61,6 +61,7 @@ jib {
 		}
 //		registry = 'docker.io' // Or your desired registry
 	}
+
 	container {
 		ports = ['8765']}
 }
