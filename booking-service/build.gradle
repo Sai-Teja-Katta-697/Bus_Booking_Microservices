@@ -54,6 +54,7 @@ dependencyManagement {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
 jib {
     from {
         image = 'openjdk:17-jdk-alpine' // Or your desired base image
