@@ -25,7 +25,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build & Push Docker Image with Jib
-        working-directory: ./apigateway
+#        working-directory: ./apigateway
         run: ./gradlew :apigateway:jib
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

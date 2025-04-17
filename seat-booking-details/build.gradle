@@ -67,4 +67,5 @@ jib {
 	container {
 		ports = ['8081']
 	}
+
 }
