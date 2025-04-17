@@ -23,9 +23,9 @@ jobs:
           
       - name: Grant execute permission for Gradle wrapper
         run: chmod +x ./gradlew
-        
+        working-directory: ./booking-service
       - name: Build & Push Docker Image with Jib
-        run: ./gradlew jib :booking-service:jib
+        run: ./gradlew jib 
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
