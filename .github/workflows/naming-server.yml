@@ -26,7 +26,7 @@ jobs:
         working-directory: ./naming-server
         
       - name: Build & Push Docker Image with Jib
-        run: ./gradlew jib :naming-server:jib
+        run: ./gradlew jib
         working-directory: ./naming-server
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
