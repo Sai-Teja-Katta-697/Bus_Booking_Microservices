@@ -25,7 +25,6 @@ jobs:
         run: chmod +x ./gradlew
         
       - name: Build & Push Docker Image with Jib
-        working-directory: ./booking-service
         run: ./gradlew jib :booking-service:jib
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
