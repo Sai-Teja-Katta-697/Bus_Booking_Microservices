@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booking-service
+spec:
+  selector:
+    matchLabels:
+      app: booking-service
+  template:
+    metadata:
+      labels:
+        app: booking-service
+    spec:
+      containers:
+      - name: booking-service
+        image: kattasaiteja/booking-service:0.0.1-SNAPSHOT
+        ports:
+        - containerPort: 8080
+        env:
+          - name: EUREKA_SERVER_URL
+            valueFrom:
+              configMapKeyRef:
+                key: eureka_service_address
+                name: eureka-cm
+          - name: ENV_CLOUD_URL
+            valueFrom:
+              configMapKeyRef:
+                key: cloud_config_map
+                name: cloud-cm
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: booking-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: booking-service
+  ports:
+  - port: 80
+    targetPort: 8080
+

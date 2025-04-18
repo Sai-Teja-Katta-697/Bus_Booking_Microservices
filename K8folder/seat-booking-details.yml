@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seat-booking-details
+spec:
+  selector:
+    matchLabels:
+      app: seat-booking-details
+  template:
+    metadata:
+      labels:
+        app: seat-booking-details
+    spec:
+      containers:
+      - name: seat-booking-details
+        image: kattasaiteja/seat-booking-details:0.0.1-SNAPSHOT
+        ports:
+        - containerPort: 8081
+        env:
+          - name: EUREKA_SERVER_URL
+            valueFrom:
+              configMapKeyRef:
+                key: eureka_service_address
+                name: eureka-cm
+          - name: ENV_CLOUD_URL
+            valueFrom:
+              configMapKeyRef:
+                key: cloud_config_map
+                name: cloud-cm
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seat-booking-details
+spec:
+  type: LoadBalancer
+  selector:
+    app: seat-booking-details
+  ports:
+  - port: 80
+    targetPort: 8081
+                

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-config
+spec:
+  selector:
+    matchLabels:
+      app: cloud-config
+  template:
+    metadata:
+      labels:
+        app: cloud-config
+    spec:
+      containers:
+      - name: cloud-config
+        image: kattasaiteja/cloud-demo:0.0.1-SNAPSHOT
+        ports:
+        - containerPort: 8888
+        env:
+          - name: EUREKA_SERVER_URL
+            valueFrom:
+              configMapKeyRef:
+                key: eureka_service_address
+                name: eureka-cm
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-config-svc
+spec:
+  selector:
+    app: cloud-config
+  ports:
+  - port: 80
+    targetPort: 8888
